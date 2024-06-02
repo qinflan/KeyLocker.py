@@ -55,7 +55,7 @@ def main():
 
     pm = PasswordManager()
 
-# Command Line Interface
+#Command Line Interface
     # print("""What do you want to do?
     #     (1) Create a new key
     #     (2) Load an existing key
@@ -102,32 +102,6 @@ def main():
 
     #     else:
     #         print("Invalid Choice")
-
-    
-    def create_key_btn():
-            path = input("Enter path: ")
-            pm.create_key(path)
-
-    def load_key_btn():
-            path = input("Enter path: ")
-            pm.load_key(path)
-
-    def create_password_file_btn():
-            path = input("Enter path: ")
-            pm.create_password_file(path, password)
-
-    def load_password_file_btn():
-            path = input("Enter path: ")
-            pm.load_password_file(path)
-
-    def add_password_btn():
-            site = input("Enter the site: ")
-            password = input("Enter the password: ")
-            pm.add_password(site, password)
-            
-    def get_password_btn():
-            site = input("What site do you want: ")
-            print(f"Password for {site} is {pm.get_password(site)}")
 
 if __name__ == "__main__":
     main()

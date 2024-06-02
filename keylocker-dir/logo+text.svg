@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 947.79 197.7">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ede6df;
+        font-family: AptlyExtraBold, Aptly;
+        font-size: 180px;
+        letter-spacing: .03em;
+      }
+
+      .cls-2 {
+        fill: #eee7e0;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: #2bb673;
+      }
+    </style>
+  </defs>
+  <rect class="cls-2" width="184.21" height="184.21" rx="45" ry="45"/>
+  <path class="cls-3" d="M157.66,135.84v15.57c0,2.95-2.4,5.33-5.37,5.33h-15.68c-.61,0-1.19-.18-1.67-.49l-.08.08-55.32-54.94c-.89-.88-2.32-.88-3.21,0l-2.26,2.25c-7.4,7.35-19.39,7.35-26.78,0l-24.3-24.13c-7.4-7.34-7.4-19.25,0-26.6l31.18-30.96c7.4-7.35,19.39-7.35,26.78,0l24.3,24.13c7.4,7.34,7.4,19.25,0,26.6l-3.32,3.3c-.89.88-.89,2.31,0,3.19l20.28,20.14c.43.42.66,1,.66,1.59v8.21c0,2.45,2,4.43,4.46,4.43h8.26c.6,0,1.18.24,1.6.66h0c.43.42.66,1,.66,1.59v7.59c0,2,1.63,3.61,3.64,3.61h7.64c.6,0,1.18.24,1.6.66l6.5,6.45-.08.08c.31.48.49,1.04.49,1.66Z"/>
+  <rect class="cls-2" x="48.85" y="50.97" width="30.67" height="26.85" rx="8.25" ry="8.25" transform="translate(-26.73 64.25) rotate(-45)"/>
+  <text class="cls-1" transform="translate(216.58 164.94)"><tspan x="0" y="0">keylocker</tspan></text>
+</svg>
