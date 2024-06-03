@@ -35,12 +35,13 @@ class PasswordManager:
                 self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
 
     def add_password(self, site, password):
-        self.password_dict[site] = password
+        if site not in self.password_dict:
+            self.password_dict[site] = password
 
-        if self.password_file is not None:
-            with open(self.password_file, 'a+') as f:
-                encrypted = Fernet(self.key).encrypt(password.encode())
-                f.write(site + ":" + encrypted.decode() + "\n")
+            if self.password_file is not None:
+                with open(self.password_file, 'a+') as f:
+                    encrypted = Fernet(self.key).encrypt(password.encode())
+                    f.write(site + ":" + encrypted.decode() + "\n")
 
     def get_password(self, site):
         return self.password_dict[site]
@@ -49,12 +50,12 @@ class PasswordManager:
 def main():
 
     #test case
-    # password = {
-    #     "email": "1234567",
-    #     "facebook": "myfbpassword",
-    #     "youtube": "helloworld123",
-    #     "x":"elonsucks"
-    # }
+    password = {
+        "email": "1234567",
+        "facebook": "myfbpassword",
+        "youtube": "helloworld123",
+        "x":"elonsucks"
+    }
 
     pm = PasswordManager()
 

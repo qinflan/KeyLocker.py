@@ -12,7 +12,7 @@ class GUI:
 
         # set basic theme
         self.root = customtkinter.CTk()
-        self.root.title("KeyLocker")
+        self.root.title("")
         self.root.iconbitmap("keylocker-dir/logo.ico")
         self.root.geometry("1000x600")
         self.root.minsize(700,580)
@@ -60,10 +60,11 @@ class GUI:
 
 
     # Submission Handling
-
         def submit_input():
+
             user_input = self.entry_box.get()
             user_password = self.password_entry.get()
+
             if user_password:
                 if self.current_function:
                     self.current_function(user_input, user_password)
@@ -73,59 +74,62 @@ class GUI:
                 self.password_entry.delete(0, 'end')  # Clear the password entry
         
             else:
-                if self.current_function:
+                if user_input and self.current_function:
                     self.current_function(user_input)
+                    print(self.current_function(user_input))
                 self.output_label.configure(text=self.output_msg)
                 self.entry_box.delete(0, 'end')
                 self.root.focus_set()
                 self.entry_box.configure(placeholder_text="Select an option")
 
+                # condition for displaying password when get_password() is called
+                if self.current_function == self.pm.get_password:
+                    password = self.current_function(user_input)
+                    self.display_password.configure(state="normal")  # Enable the text box
+                    self.display_password.delete("1.0", "end")  # Clear previous content
+                    self.display_password.insert("end", f"Password for {user_input}: \n{password}")  # Insert password
+                    self.display_password.configure(state="disabled")  # Set back to read-only
+                    self.display_password.grid()
+
+
     # Button Callback Functions
         def create_key_btn():
+            self.display_password.grid_remove()
             self.entry_box.configure(placeholder_text="Specify name for key")
-            self.current_function = None
-            self.output_msg = ""
             self.current_function = self.pm.create_key
             self.output_msg = "Key successfully created"
 
         def load_key_btn():
-            self.entry_box.configure(placeholder_text="Specify key filename")
-            self.current_function = None
-            self.output_msg = ""
+            self.display_password.grid_remove()
             self.current_function = self.pm.load_key
+            self.entry_box.configure(placeholder_text="Specify key filename")
             self.output_msg = "Key loaded successfully"
 
     # Create blank file if no values are given, API library requires filename
         def create_password_file_btn():
-            self.current_function = None
-            self.output_msg = ""
-            self.entry_box.configure(placeholder_text="Specify name for password file")
+            self.display_password.grid_remove()
             self.current_function = self.pm.create_password_file
+            self.entry_box.configure(placeholder_text="Specify name for password file")
             self.output_msg = "Password file created"
 
         def load_password_file_btn():
-            self.current_function = None
-            self.output_msg = ""
-            self.entry_box.configure(placeholder_text="Specify password filename")
+            self.display_password.grid_remove()
             self.current_function = self.pm.load_password_file
+            self.entry_box.configure(placeholder_text="Specify password filename")
             self.output_msg = "Password file loaded successfully"
 
         def add_password_btn():
-            self.current_function = None
-            self.output_msg = ""
+            self.display_password.grid_remove()
+            self.current_function = lambda site, password: self.pm.add_password(site, password)
             self.entry_box.configure(placeholder_text="Enter site/service name")
             self.password_entry.grid()
-            site = self.entry_box.get()
-            password = self.password_entry.get()
-            self.current_function = self.pm.add_password
             self.output_msg = "Password added"
                     
         def get_password_btn():
-            self.current_function = None
+            self.current_function = self.pm.get_password
             self.output_msg = ""
-            self.entry_box.configure(placeholder_text="Enter site for password")
-            site = input("What site do you want: ")
-            print(f"Password for {site} is {self.pm.get_password(site)}")
+            self.password_entry.grid_remove()
+            self.entry_box.configure(placeholder_text="Enter site for password")       
 
     # insert logic for pulling all keys from (key, value) pair in API
         def view_sites():
@@ -222,9 +226,17 @@ class GUI:
         self.switch.place(relx = 0.72, rely = 0.1)
         print(self.switch.get())
 
-    #output label
+    #output message
         self.output_label = customtkinter.CTkLabel(master = self.frame2, text="", font = self.btn)
         self.output_label.grid(row = 3)
+
+
+    #output password
+        self.display_password = customtkinter.CTkTextbox(self.frame2, width=300, font=self.btn, height=2)
+        self.display_password.grid(row=3)  # Initially grid it, but set it to be invisible
+        self.display_password.grid_remove()  # Hide it initially
+
+
 
         self.root.mainloop()
 
