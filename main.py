@@ -19,6 +19,8 @@ class PasswordManager:
 
     def create_password_file(self, path, initial_values=None):
         self.password_file = path
+        with open(path, 'wb'):
+            pass
     
         if initial_values is not None:
             for key, value in initial_values.items():
@@ -47,12 +49,12 @@ class PasswordManager:
 def main():
 
     #test case
-    password = {
-        "email": "1234567",
-        "facebook": "myfbpassword",
-        "youtube": "helloworld123",
-        "x":"elonsucks"
-    }
+    # password = {
+    #     "email": "1234567",
+    #     "facebook": "myfbpassword",
+    #     "youtube": "helloworld123",
+    #     "x":"elonsucks"
+    # }
 
     pm = PasswordManager()
 
