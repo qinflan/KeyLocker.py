@@ -63,13 +63,22 @@ class GUI:
 
         def submit_input():
             user_input = self.entry_box.get()
-            print(user_input)
-            if self.current_function:
-                self.current_function(user_input)
-            self.output_label.configure(text=self.output_msg)
-            self.entry_box.delete(0, 'end')
-            self.root.focus_set()
-            self.entry_box.configure(placeholder_text="Select an option")
+            user_password = self.password_entry.get()
+            if user_password:
+                if self.current_function:
+                    self.current_function(user_input, user_password)
+                self.current_function(user_input, user_password)
+                self.output_label.configure(text=self.output_msg)
+                self.entry_box.delete(0, 'end')
+                self.password_entry.delete(0, 'end')  # Clear the password entry
+        
+            else:
+                if self.current_function:
+                    self.current_function(user_input)
+                self.output_label.configure(text=self.output_msg)
+                self.entry_box.delete(0, 'end')
+                self.root.focus_set()
+                self.entry_box.configure(placeholder_text="Select an option")
 
     # Button Callback Functions
         def create_key_btn():
@@ -106,9 +115,9 @@ class GUI:
             self.output_msg = ""
             self.entry_box.configure(placeholder_text="Enter site/service name")
             self.password_entry.grid()
-            site = input("Enter the site: ")
-            password = input("Enter the password: ")
-            self.pm.add_password(site, password)
+            site = self.entry_box.get()
+            password = self.password_entry.get()
+            self.current_function = self.pm.add_password
             self.output_msg = "Password added"
                     
         def get_password_btn():
