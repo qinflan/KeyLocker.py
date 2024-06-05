@@ -65,6 +65,7 @@ class GUI:
             user_input = self.entry_box.get()
             user_password = self.password_entry.get()
 
+            # add_password() submission
             if user_password:
                 if self.current_function:
                     self.current_function(user_input, user_password)
@@ -85,22 +86,44 @@ class GUI:
                 # condition for displaying password when get_password() is called
                 if self.current_function == self.pm.get_password:
                     password = self.current_function(user_input)
-                    self.display_password.configure(state="normal")  # Enable the text box
-                    self.display_password.delete("1.0", "end")  # Clear previous content
-                    self.display_password.insert("end", f"Password for {user_input}: \n{password}")  # Insert password
-                    self.display_password.configure(state="disabled")  # Set back to read-only
-                    self.display_password.grid()
+
+                    if password:
+                        self.display_password.configure(state="normal")  # Enable the text box
+                        self.display_password.delete("1.0", "end")  # Clear previous content
+                        self.output_msg = f"Password for {user_input}"
+                        self.output_label.configure(text=self.output_msg)
+                        self.output_label.grid()
+                        self.display_password.tag_config("center", justify='center')
+                        self.display_password.insert("end", password)  # Insert password
+                        self.display_password.configure(state="disabled")  # Set back to read-only
+                        self.display_password.tag_add("center", "1.0", "end")
+                        self.display_password.grid()
+
+                    else: 
+                        self.output_msg = "Unable to locate site in file"
+                        self.output_label.configure(text=self.output_msg)
+                else:
+                    self.current_function(user_input)
+                    self.output_label.configure(text=self.output_msg)
+            self.entry_box.delete(0, 'end')
+            self.root.focus_set()
+            self.entry_box.configure(placeholder_text="Select an option")
+
 
 
     # Button Callback Functions
         def create_key_btn():
             self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
             self.entry_box.configure(placeholder_text="Specify name for key")
             self.current_function = self.pm.create_key
             self.output_msg = "Key successfully created"
 
         def load_key_btn():
             self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
             self.current_function = self.pm.load_key
             self.entry_box.configure(placeholder_text="Specify key filename")
             self.output_msg = "Key loaded successfully"
@@ -108,27 +131,35 @@ class GUI:
     # Create blank file if no values are given, API library requires filename
         def create_password_file_btn():
             self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
             self.current_function = self.pm.create_password_file
             self.entry_box.configure(placeholder_text="Specify name for password file")
             self.output_msg = "Password file created"
 
         def load_password_file_btn():
             self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
             self.current_function = self.pm.load_password_file
             self.entry_box.configure(placeholder_text="Specify password filename")
             self.output_msg = "Password file loaded successfully"
 
         def add_password_btn():
             self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            self.output_label.grid(row=3)
+            submit_button.grid(row=2)
             self.current_function = lambda site, password: self.pm.add_password(site, password)
             self.entry_box.configure(placeholder_text="Enter site/service name")
             self.password_entry.grid()
             self.output_msg = "Password added"
                     
         def get_password_btn():
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
             self.current_function = self.pm.get_password
             self.output_msg = ""
-            self.password_entry.grid_remove()
             self.entry_box.configure(placeholder_text="Enter site for password")       
 
     # insert logic for pulling all keys from (key, value) pair in API
@@ -215,7 +246,7 @@ class GUI:
             text="Submit", 
             font=self.btn, 
             command=submit_input)
-        submit_button.grid(row = 2)
+        submit_button.grid(row = 1)
 
     # light mode/dark mode switch
         self.switch = customtkinter.CTkSwitch(self.root, text='Toggle Theme',
@@ -228,17 +259,17 @@ class GUI:
 
     #output message
         self.output_label = customtkinter.CTkLabel(master = self.frame2, text="", font = self.btn)
-        self.output_label.grid(row = 3)
+        self.output_label.grid(row = 2)
 
 
     #output password
-        self.display_password = customtkinter.CTkTextbox(self.frame2, width=300, font=self.btn, height=2)
+        self.display_password = customtkinter.CTkTextbox(self.frame2, height=1, font=self.btn)
         self.display_password.grid(row=3)  # Initially grid it, but set it to be invisible
         self.display_password.grid_remove()  # Hide it initially
-
 
 
         self.root.mainloop()
 
 if __name__ == "__main__":
     gui = GUI()
+    

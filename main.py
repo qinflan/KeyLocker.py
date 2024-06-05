@@ -44,7 +44,11 @@ class PasswordManager:
                     f.write(site + ":" + encrypted.decode() + "\n")
 
     def get_password(self, site):
-        return self.password_dict[site]
+        if site in self.password_dict:
+            return self.password_dict[site]
+        else:
+            return
+    
 
 
 def main():
