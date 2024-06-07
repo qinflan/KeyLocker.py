@@ -14,8 +14,12 @@ class PasswordManager:
             f.write(self.key)
 
     def load_key(self, path):
-        with open(path, 'rb') as f:
-            self.key = f.read()
+        try:
+            if path:
+                with open(path, 'rb') as f:
+                    self.key = f.read()
+        
+        except:    raise ValueError("Unable to load key")
 
     def create_password_file(self, path, initial_values=None):
         self.password_file = path
@@ -27,12 +31,18 @@ class PasswordManager:
                 self.add_password(key, value)
 
     def load_password_file(self, path):
-        self.password_file = path
 
-        with open(path, 'r') as f:
-            for line in f:
-                site, encrypted = line.split(":")
-                self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
+        try:
+            if path:
+                self.password_file = path
+
+                with open(path, 'r') as f:
+                    for line in f:
+                        site, encrypted = line.split(":")
+                        self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
+       
+        except:   raise ValueError("Unable to load Password File")
+        
 
     def add_password(self, site, password):
         if site not in self.password_dict:
@@ -43,11 +53,22 @@ class PasswordManager:
                     encrypted = Fernet(self.key).encrypt(password.encode())
                     f.write(site + ":" + encrypted.decode() + "\n")
 
+            if not site:    raise ValueError("Please enter a site name")
+
+
     def get_password(self, site):
         if site in self.password_dict:
             return self.password_dict[site]
-        else:
-            return
+        
+        else:   raise ValueError("Unable to locate site in password file")
+        
+# TODO: FIX THIS FUNCTION
+    def get_sites(self):
+        try: 
+            if self.password_dict:
+                return list(self.password_dict.keys())
+         
+        except:    ValueError("Please load password file")
     
 
 
@@ -71,6 +92,7 @@ def main():
         (4) Load existing password file
         (5) Add a new password
         (6) Get a password
+        (7) View associated sites
         (q) Quit
         """)
 
@@ -104,6 +126,9 @@ def main():
             site = input("What site do you want: ")
             print(f"Password for {site} is {pm.get_password(site)}")
             
+        elif choice == "7":
+            print(pm.get_sites)
+
         elif choice == "q":
             done = True
             print("Enjoy!")

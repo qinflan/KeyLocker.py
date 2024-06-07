@@ -65,50 +65,74 @@ class GUI:
             user_input = self.entry_box.get()
             user_password = self.password_entry.get()
 
+            try:
+
             # add_password() submission
-            if user_password:
-                if self.current_function:
+                if user_password:
+                    if self.current_function:
+                        self.current_function(user_input, user_password)
                     self.current_function(user_input, user_password)
-                self.current_function(user_input, user_password)
-                self.output_label.configure(text=self.output_msg)
-                self.entry_box.delete(0, 'end')
-                self.password_entry.delete(0, 'end')  # Clear the password entry
-        
-            else:
-                if user_input and self.current_function:
-                    self.current_function(user_input)
-                    print(self.current_function(user_input))
-                self.output_label.configure(text=self.output_msg)
+                    self.output_label.configure(text=self.output_msg)
+                    self.entry_box.delete(0, 'end')
+                    self.password_entry.delete(0, 'end')  # Clear the password entry
+            
+                else:
+                    if user_input and self.current_function:
+                        self.current_function(user_input)
+                        print(self.current_function(user_input))
+                    self.output_label.configure(text=self.output_msg)
+                    self.entry_box.delete(0, 'end')
+                    self.root.focus_set()
+                    self.entry_box.configure(placeholder_text="Select an option")
+
+                    # condition for displaying password when get_password() is called
+                    if self.current_function == self.pm.get_password:
+                        password = self.current_function(user_input)
+
+                        if password:
+                            self.display_password.configure(state="normal")  # Enable the text box
+                            self.display_password.delete("1.0", "end")  # Clear previous content
+                            self.output_msg = f"Password for {user_input}"
+                            self.output_label.configure(text=self.output_msg)
+                            self.output_label.grid(row=2)
+                            self.display_password.tag_config("center", justify='center')
+                            self.display_password.insert("end", password)  # Insert password
+                            self.display_password.configure(state="disabled")  # Set back to read-only
+                            self.display_password.tag_add("center", "1.0", "end")
+                            self.display_password.grid()
+
+                        # else: 
+                        #     self.output_msg = "Unable to locate site in file"
+                        #     self.output_label.configure(text=self.output_msg)
+                    else:
+                        self.current_function(user_input)
+                        self.output_label.configure(text=self.output_msg)
+
+                # get_sites_btn submission
+                    if self.current_function == self.pm.get_sites:
+                        sites = self.current_function(user_input)
+                    self.display_password.configure(state="normal")  # Enable the text box
+                    self.display_password.delete("1.0", "end")  # Clear previous content
+                    for site in sites:
+                        self.display_password.insert("end", f"{site}\n")  # Insert site
+                    self.display_password.configure(state="disabled")  # Set back to read-only
+                    self.display_password.grid()
                 self.entry_box.delete(0, 'end')
                 self.root.focus_set()
                 self.entry_box.configure(placeholder_text="Select an option")
 
-                # condition for displaying password when get_password() is called
-                if self.current_function == self.pm.get_password:
-                    password = self.current_function(user_input)
-
-                    if password:
-                        self.display_password.configure(state="normal")  # Enable the text box
-                        self.display_password.delete("1.0", "end")  # Clear previous content
-                        self.output_msg = f"Password for {user_input}"
-                        self.output_label.configure(text=self.output_msg)
-                        self.output_label.grid()
-                        self.display_password.tag_config("center", justify='center')
-                        self.display_password.insert("end", password)  # Insert password
-                        self.display_password.configure(state="disabled")  # Set back to read-only
-                        self.display_password.tag_add("center", "1.0", "end")
-                        self.display_password.grid()
-
-                    else: 
-                        self.output_msg = "Unable to locate site in file"
-                        self.output_label.configure(text=self.output_msg)
-                else:
-                    self.current_function(user_input)
+            except ValueError as e:
+                    self.output_msg = str(e)
                     self.output_label.configure(text=self.output_msg)
+                    self.output_label.grid()
+            except Exception as e:
+                    self.output_msg = f"An unexpected error occurred: {str(e)}"
+                    self.output_label.configure(text=self.output_msg)
+                    self.output_label.grid()
+
             self.entry_box.delete(0, 'end')
             self.root.focus_set()
             self.entry_box.configure(placeholder_text="Select an option")
-
 
 
     # Button Callback Functions
@@ -160,11 +184,15 @@ class GUI:
             submit_button.grid(row=1)
             self.current_function = self.pm.get_password
             self.output_msg = ""
-            self.entry_box.configure(placeholder_text="Enter site for password")       
+            self.entry_box.configure(placeholder_text="Enter site for password") 
 
-    # insert logic for pulling all keys from (key, value) pair in API
-        def view_sites():
-            pass
+        def get_sites_btn():
+            self.password_entry.grid_remove()
+            submit_button.grid(row=1)
+            self.entry_box.configure(placeholder_text="Enter filename for passwords")
+            self.current_function = self.pm.get_sites
+            self.output_msg = "Associated Sites:"
+            self.display_password
 
         def toggle_theme():
             val=self.switch.get()
@@ -199,7 +227,7 @@ class GUI:
             corner_radius=14,
             text="View used sites", 
             font=self.btn, 
-            command=add_password_btn)
+            command=get_sites_btn)
         button3.pack(pady=10, padx=10)
 
         button4 = customtkinter.CTkButton(master=self.frame3, 
