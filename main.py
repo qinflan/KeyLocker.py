@@ -63,12 +63,15 @@ class PasswordManager:
         else:   raise ValueError("Unable to locate site in password file")
         
 # TODO: FIX THIS FUNCTION
-    def get_sites(self):
+    def get_sites(self, path):
         try: 
+            self.load_password_file(path)
             if self.password_dict:
                 return list(self.password_dict.keys())
-         
-        except:    ValueError("Please load password file")
+            else:
+                raise ValueError("No sites found in password dictionary")
+        except Exception as e:
+            raise ValueError("Unable to load password file") from e
     
 
 
@@ -127,7 +130,10 @@ def main():
             print(f"Password for {site} is {pm.get_password(site)}")
             
         elif choice == "7":
-            print(pm.get_sites)
+            sites = pm.get_sites()
+            print("Associated sites:")
+            for site in sites:
+                print(site)
 
         elif choice == "q":
             done = True

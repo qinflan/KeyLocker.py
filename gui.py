@@ -88,7 +88,6 @@ class GUI:
                     # condition for displaying password when get_password() is called
                     if self.current_function == self.pm.get_password:
                         password = self.current_function(user_input)
-
                         if password:
                             self.display_password.configure(state="normal")  # Enable the text box
                             self.display_password.delete("1.0", "end")  # Clear previous content
@@ -101,32 +100,24 @@ class GUI:
                             self.display_password.tag_add("center", "1.0", "end")
                             self.display_password.grid()
 
-                        # else: 
-                        #     self.output_msg = "Unable to locate site in file"
-                        #     self.output_label.configure(text=self.output_msg)
-                    else:
-                        self.current_function(user_input)
-                        self.output_label.configure(text=self.output_msg)
-
                 # get_sites_btn submission
-                    if self.current_function == self.pm.get_sites:
-                        sites = self.current_function(user_input)
-                    self.display_password.configure(state="normal")  # Enable the text box
-                    self.display_password.delete("1.0", "end")  # Clear previous content
-                    for site in sites:
-                        self.display_password.insert("end", f"{site}\n")  # Insert site
-                    self.display_password.configure(state="disabled")  # Set back to read-only
-                    self.display_password.grid()
+                    elif self.current_function == self.pm.get_sites:
+                        if self.current_function(user_input):
+                            self.display_sites.configure(state="normal", height=60)  # Enable the text box
+                            self.display_sites.delete("1.0", "end")  # Clear previous content
+                            for site in self.current_function(user_input):
+                                self.display_sites.insert("end", f"{site}\n")  # Insert site
+                        self.display_sites.configure(state="disabled",)  # Set back to read-only
+                        self.display_sites.tag_config("center", justify='center')
+                        self.display_sites.tag_add("center", "1.0", "end")
+                        self.display_sites.grid()
+                    
                 self.entry_box.delete(0, 'end')
                 self.root.focus_set()
                 self.entry_box.configure(placeholder_text="Select an option")
 
             except ValueError as e:
                     self.output_msg = str(e)
-                    self.output_label.configure(text=self.output_msg)
-                    self.output_label.grid()
-            except Exception as e:
-                    self.output_msg = f"An unexpected error occurred: {str(e)}"
                     self.output_label.configure(text=self.output_msg)
                     self.output_label.grid()
 
@@ -192,7 +183,7 @@ class GUI:
             self.entry_box.configure(placeholder_text="Enter filename for passwords")
             self.current_function = self.pm.get_sites
             self.output_msg = "Associated Sites:"
-            self.display_password
+            self.output_label.grid(row=2)
 
         def toggle_theme():
             val=self.switch.get()
@@ -294,6 +285,11 @@ class GUI:
         self.display_password = customtkinter.CTkTextbox(self.frame2, height=1, font=self.btn)
         self.display_password.grid(row=3)  # Initially grid it, but set it to be invisible
         self.display_password.grid_remove()  # Hide it initially
+
+        self.display_sites = customtkinter.CTkTextbox(self.frame2, height=80, font=self.btn)
+        self.display_sites.grid(row=3)  # Initially grid it, but set it to be invisible
+        self.display_sites.grid_remove()  # Hide it initially
+
 
 
         self.root.mainloop()
