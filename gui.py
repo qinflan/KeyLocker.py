@@ -31,6 +31,15 @@ class GUI:
         self.logo_label = customtkinter.CTkLabel(master=self.root, text="", image=logo_img)
         self.logo_label.place(rely=0.06, relx=0.08)
 
+        # icons
+        folder_icon = customtkinter.CTkImage(Image.open("keylocker-dir/folder-icon.png"), size=(22,22))
+        search_icon = customtkinter.CTkImage(Image.open("keylocker-dir/search-icon.png"), size=(22,22))
+        view_icon = customtkinter.CTkImage(Image.open("keylocker-dir/list-icon.png"), size=(30,30))
+        add_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-icon.png"), size=(25,25))
+        new_key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-key-icon.png"), size=(25,25))
+        add_file_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-file.png"), size=(25,25))
+        key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/logo.png"), size=(22,22))
+
 
         # frame containers
         #-----------------------
@@ -66,6 +75,12 @@ class GUI:
 
             user_input = self.entry_box.get()
             user_password = self.password_entry.get()
+
+            # validate input
+            if not user_input:
+                self.output_msg = "No input received"
+                self.output_label.configure(text=self.output_msg)
+                self.output_label.grid()
 
             try:
 
@@ -193,6 +208,7 @@ class GUI:
 
         def get_sites_btn():
             self.password_entry.grid_remove()
+            self.display_password.grid_remove()
             self.output_label.grid(row=2)
             self.output_label.grid_remove()
             submit_button.grid(row=1)
@@ -207,19 +223,26 @@ class GUI:
             else:
                 customtkinter.set_appearance_mode("dark")
 
+        def open_file():
+            path = customtkinter.filedialog.askopenfilename()
+
     # buttons
         button1 = customtkinter.CTkButton(master=self.frame1, 
+            image=search_icon,
             width=210, 
             height=50, 
+            compound="right",
             corner_radius=14, 
             text="Retrieve password", 
             font=self.btn, 
             command=get_password_btn)
         button1.grid(row=0, pady=10, padx=10, sticky="s")
 
-        button2 = customtkinter.CTkButton(master=self.frame1, 
+        button2 = customtkinter.CTkButton(master=self.frame1,
+            image=add_icon,
             width=210, 
             height=50,
+            compound="right",
             corner_radius=14,
             text="Add a password", 
             font=self.btn, 
@@ -227,8 +250,10 @@ class GUI:
         button2.grid(row=1, pady=10, padx=10)
 
         button3 = customtkinter.CTkButton(master=self.frame1, 
+            image=view_icon,
             width=210, 
             height=50,
+            compound="right",
             corner_radius=14,
             text="View used sites", 
             font=self.btn, 
@@ -236,17 +261,21 @@ class GUI:
         button3.grid(row=2, pady=10, padx=10, sticky="n")
 
         button4 = customtkinter.CTkButton(master=self.frame3, 
+            image=add_file_icon,
             width=250, 
             height=50,
+            compound="right",
             corner_radius=14,
-            text="Create new password file", 
+            text="Create password file", 
             font=self.btn, 
             command=create_password_file_btn)
         button4.grid(row = 0, column = 0, sticky="se")
 
         button5 = customtkinter.CTkButton(master=self.frame3, 
+            image=folder_icon,
             width=250, 
             height=50,
+            compound="right",
             corner_radius=14,
             text="Load password file", 
             font=self.btn, 
@@ -254,8 +283,10 @@ class GUI:
         button5.grid(row = 0, column = 2, sticky="sw")
 
         button6 = customtkinter.CTkButton(master=self.frame3, 
+            image=new_key_icon,
             width=250, 
             height=50,
+            compound="right",
             corner_radius=14,
             text="Create a new key", 
             font=self.btn, 
@@ -263,8 +294,10 @@ class GUI:
         button6.grid(row = 2, column = 0, sticky="ne")
 
         button7 = customtkinter.CTkButton(master=self.frame3, 
+            image=key_icon,
             width=250, 
             height=50,
+            compound="right",
             corner_radius=14,
             text="Load existing key",
             font=self.btn, 

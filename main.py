@@ -14,11 +14,12 @@ class PasswordManager:
             f.write(self.key)
 
     def load_key(self, path):
-        try:
-            if path:
-                with open(path, 'rb') as f:
-                    self.key = f.read()
+        if not path:
+            raise ValueError("No path specified for the key")
         
+        try:
+            with open(path, 'rb') as f:
+                self.key = f.read()
         except:    raise ValueError("Unable to load key")
 
     def create_password_file(self, path, initial_values=None):
@@ -31,15 +32,16 @@ class PasswordManager:
                 self.add_password(key, value)
 
     def load_password_file(self, path):
+        if not path:
+            raise ValueError("No path specified for the password file")
 
         try:
-            if path:
-                self.password_file = path
+            self.password_file = path
 
-                with open(path, 'r') as f:
-                    for line in f:
-                        site, encrypted = line.split(":")
-                        self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
+            with open(path, 'r') as f:
+                for line in f:
+                    site, encrypted = line.split(":")
+                    self.password_dict[site] = Fernet(self.key).decrypt(encrypted.encode()).decode()
        
         except:   raise ValueError("Unable to load Password File")
         
