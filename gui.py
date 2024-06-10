@@ -14,9 +14,9 @@ class GUI:
         self.root = customtkinter.CTk()
         self.root.title("")
         self.root.iconbitmap("keylocker-dir/logo.ico")
-        self.root.geometry("1000x600")
-        self.root.minsize(700,580)
-        self.root.maxsize(1200,800)
+        self.root.geometry("900x700")
+        self.root.minsize(700,600)
+        self.root.maxsize(1200,700)
         customtkinter.set_appearance_mode("dark")
         customtkinter.set_default_color_theme("green")
 
@@ -29,7 +29,7 @@ class GUI:
         light_image=Image.open("keylocker-dir/logo+text-black.png"), size=(300, 58))
 
         self.logo_label = customtkinter.CTkLabel(master=self.root, text="", image=logo_img)
-        self.logo_label.place(rely=0.04, relx=0.1)
+        self.logo_label.place(rely=0.06, relx=0.08)
 
 
         # frame containers
@@ -37,17 +37,19 @@ class GUI:
 
     # get/add password buttons
         self.frame1 = customtkinter.CTkFrame(master=self.root)
-        self.frame1.place(relx = 0.08, rely = 0.18, relwidth = 0.35, relheight = 0.38)
+        self.frame1.place(relx = 0.08, rely = 0.2, relwidth = 0.35, relheight = 0.34)
+        self.frame1.columnconfigure((0), weight = 1)
+        self.frame1.rowconfigure((0,1,2), weight = 1)
 
     # submission and output frame
         self.frame2 = customtkinter.CTkFrame(master=self.root)
-        self.frame2.place(relx = 0.47, rely = 0.18, relwidth = 0.45, relheight = 0.38)
+        self.frame2.place(relx = 0.47, rely = 0.2, relwidth = 0.45, relheight = 0.34)
         self.frame2.columnconfigure((0), weight = 1)
         self.frame2.rowconfigure((0,1,2,3), weight = 1)
 
     # grid frame for file/load buttons
         self.frame3 = customtkinter.CTkFrame(master=self.root)
-        self.frame3.place(relx = 0.08, rely = 0.62, relheight = 0.28, relwidth = 0.84)
+        self.frame3.place(relx = 0.08, rely = 0.59, relheight = 0.25, relwidth = 0.84)
         self.frame3.columnconfigure((0,1,2), weight = 1)
         self.frame3.rowconfigure((0,1,2), weight = 1)
 
@@ -81,6 +83,7 @@ class GUI:
                         self.current_function(user_input)
                         print(self.current_function(user_input))
                     self.output_label.configure(text=self.output_msg)
+                    self.output_label.grid()
                     self.entry_box.delete(0, 'end')
                     self.root.focus_set()
                     self.entry_box.configure(placeholder_text="Select an option")
@@ -130,6 +133,8 @@ class GUI:
         def create_key_btn():
             self.display_password.grid_remove()
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.entry_box.configure(placeholder_text="Specify name for key")
             self.current_function = self.pm.create_key
@@ -138,6 +143,8 @@ class GUI:
         def load_key_btn():
             self.display_password.grid_remove()
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.current_function = self.pm.load_key
             self.entry_box.configure(placeholder_text="Specify key filename")
@@ -147,6 +154,8 @@ class GUI:
         def create_password_file_btn():
             self.display_password.grid_remove()
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.current_function = self.pm.create_password_file
             self.entry_box.configure(placeholder_text="Specify name for password file")
@@ -155,6 +164,8 @@ class GUI:
         def load_password_file_btn():
             self.display_password.grid_remove()
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.current_function = self.pm.load_password_file
             self.entry_box.configure(placeholder_text="Specify password filename")
@@ -163,7 +174,9 @@ class GUI:
         def add_password_btn():
             self.display_password.grid_remove()
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
             self.output_label.grid(row=3)
+            self.output_label.grid_remove()
             submit_button.grid(row=2)
             self.current_function = lambda site, password: self.pm.add_password(site, password)
             self.entry_box.configure(placeholder_text="Enter site/service name")
@@ -172,18 +185,20 @@ class GUI:
                     
         def get_password_btn():
             self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.current_function = self.pm.get_password
-            self.output_msg = ""
             self.entry_box.configure(placeholder_text="Enter site for password") 
 
         def get_sites_btn():
             self.password_entry.grid_remove()
+            self.output_label.grid(row=2)
+            self.output_label.grid_remove()
             submit_button.grid(row=1)
             self.entry_box.configure(placeholder_text="Enter filename for passwords")
             self.current_function = self.pm.get_sites
-            self.output_msg = "Associated Sites:"
-            self.output_label.grid(row=2)
+            self.output_msg = "Associated sites"
 
         def toggle_theme():
             val=self.switch.get()
@@ -199,9 +214,8 @@ class GUI:
             corner_radius=14, 
             text="Retrieve password", 
             font=self.btn, 
-            # hover_color=("",""),
             command=get_password_btn)
-        button1.pack(pady=10, padx=0)
+        button1.grid(row=0, pady=10, padx=10, sticky="s")
 
         button2 = customtkinter.CTkButton(master=self.frame1, 
             width=210, 
@@ -210,7 +224,7 @@ class GUI:
             text="Add a password", 
             font=self.btn, 
             command=add_password_btn)
-        button2.pack(pady=10, padx=10)
+        button2.grid(row=1, pady=10, padx=10)
 
         button3 = customtkinter.CTkButton(master=self.frame1, 
             width=210, 
@@ -219,7 +233,7 @@ class GUI:
             text="View used sites", 
             font=self.btn, 
             command=get_sites_btn)
-        button3.pack(pady=10, padx=10)
+        button3.grid(row=2, pady=10, padx=10, sticky="n")
 
         button4 = customtkinter.CTkButton(master=self.frame3, 
             width=250, 
@@ -286,8 +300,8 @@ class GUI:
         self.display_password.grid(row=3)  # Initially grid it, but set it to be invisible
         self.display_password.grid_remove()  # Hide it initially
 
-        self.display_sites = customtkinter.CTkTextbox(self.frame2, height=80, font=self.btn)
-        self.display_sites.grid(row=3)  # Initially grid it, but set it to be invisible
+        self.display_sites = customtkinter.CTkTextbox(self.frame2, height=2, font=self.btn)
+        self.display_sites.grid(row=3, sticky="ns", pady=10)  # Initially grid it, but set it to be invisible
         self.display_sites.grid_remove()  # Hide it initially
 
 
