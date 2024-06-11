@@ -65,9 +65,8 @@ class PasswordManager:
         else:   raise ValueError("Unable to locate site in password file")
         
 
-    def get_sites(self, path):
+    def get_sites(self):
         try: 
-            self.load_password_file(path)
             if self.password_dict:
                 return list(self.password_dict.keys())
             else:

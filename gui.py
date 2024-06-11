@@ -72,7 +72,6 @@ class GUI:
 
     # Submission Handling
         def submit_input():
-
             user_input = self.entry_box.get()
             user_password = self.password_entry.get()
 
@@ -83,7 +82,6 @@ class GUI:
                 self.output_label.grid()
 
             try:
-
             # add_password() submission
                 if user_password:
                     if self.current_function:
@@ -92,19 +90,19 @@ class GUI:
                     self.output_label.configure(text=self.output_msg)
                     self.output_label.grid()
                     self.entry_box.delete(0, 'end')
-                    self.password_entry.delete(0, 'end')  # Clear the password entry
-            
+                    self.password_entry.delete(0, 'end')
+
+                # create file on submit
                 else:
                     if user_input and self.current_function:
                         self.current_function(user_input)
-                        print(self.current_function(user_input))
                     self.output_label.configure(text=self.output_msg)
                     self.output_label.grid()
                     self.entry_box.delete(0, 'end')
                     self.root.focus_set()
                     self.entry_box.configure(placeholder_text="Select an option")
 
-                    # condition for displaying password when get_password() is called
+                    # display password when get_password() is called
                     if self.current_function == self.pm.get_password:
                         password = self.current_function(user_input)
                         if password:
@@ -119,18 +117,6 @@ class GUI:
                             self.display_password.tag_add("center", "1.0", "end")
                             self.display_password.grid()
 
-                # get_sites_btn submission
-                    elif self.current_function == self.pm.get_sites:
-                        if self.current_function(user_input):
-                            self.display_sites.configure(state="normal", height=60)  # Enable the text box
-                            self.display_sites.delete("1.0", "end")  # Clear previous content
-                            for site in self.current_function(user_input):
-                                self.display_sites.insert("end", f"{site}\n")  # Insert site
-                        self.display_sites.configure(state="disabled",)  # Set back to read-only
-                        self.display_sites.tag_config("center", justify='center')
-                        self.display_sites.tag_add("center", "1.0", "end")
-                        self.display_sites.grid()
-                    
                 self.entry_box.delete(0, 'end')
                 self.root.focus_set()
                 self.entry_box.configure(placeholder_text="Select an option")
@@ -212,12 +198,30 @@ class GUI:
         def get_sites_btn():
             self.password_entry.grid_remove()
             self.display_password.grid_remove()
-            self.output_label.grid(row=2)
-            self.output_label.grid_remove()
             submit_button.grid(row=1)
-            self.entry_box.configure(placeholder_text="Enter filename for passwords")
+            self.entry_box.configure(placeholder_text="Select an option")
             self.current_function = self.pm.get_sites
             self.output_msg = "Associated sites"
+            self.display_sites.configure(state="normal", height=60)  # Enable the text box
+            self.display_sites.delete("1.0", "end")  # Clear previous content
+
+            # Error handling - ensure password file is loaded
+            try:
+                for site in self.current_function():
+                    self.display_sites.insert("end", f"{site}\n")  # Insert site
+                self.display_sites.configure(state="disabled",)  # Set back to read-only
+                self.display_sites.tag_config("center", justify='center')
+                self.display_sites.tag_add("center", "1.0", "end")
+                self.display_sites.grid()
+                self.output_label.configure(text=self.output_msg)
+                self.output_label.grid(row=2)
+
+            # Output error message
+            except:
+                self.output_msg = "Please load password file"
+                self.output_label.configure(text=self.output_msg)
+                self.output_label.grid(row=2)
+
 
         def toggle_theme():
             val=self.switch.get()
@@ -332,20 +336,20 @@ class GUI:
         self.switch.place(relx = 0.72, rely = 0.1)
         print(self.switch.get())
 
-    #output message
+    # output message widget
         self.output_label = customtkinter.CTkLabel(master = self.frame2, text="", font = self.btn)
         self.output_label.grid(row = 2)
 
 
-    #output password
+    # output password widget
         self.display_password = customtkinter.CTkTextbox(self.frame2, height=1, font=self.btn)
-        self.display_password.grid(row=3)  # Initially grid it, but set it to be invisible
-        self.display_password.grid_remove()  # Hide it initially
+        self.display_password.grid(row=3)
+        self.display_password.grid_remove()
 
+    # output sites widget
         self.display_sites = customtkinter.CTkTextbox(self.frame2, height=2, font=self.btn)
-        self.display_sites.grid(row=3, sticky="ns", pady=10)  # Initially grid it, but set it to be invisible
-        self.display_sites.grid_remove()  # Hide it initially
-
+        self.display_sites.grid(row=3, sticky="ns", pady=10)
+        self.display_sites.grid_remove()
 
 
         self.root.mainloop()
