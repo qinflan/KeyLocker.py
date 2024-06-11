@@ -35,8 +35,8 @@ class GUI:
         folder_icon = customtkinter.CTkImage(Image.open("keylocker-dir/folder-icon.png"), size=(22,22))
         search_icon = customtkinter.CTkImage(Image.open("keylocker-dir/search-icon.png"), size=(22,22))
         view_icon = customtkinter.CTkImage(Image.open("keylocker-dir/list-icon.png"), size=(30,30))
-        add_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-icon.png"), size=(25,25))
-        new_key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-key-icon.png"), size=(25,25))
+        add_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-icon.png"), size=(20,20))
+        new_key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-key-icon2.png"), size=(23,23))
         add_file_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-file.png"), size=(25,25))
         key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/logo.png"), size=(22,22))
 
@@ -90,6 +90,7 @@ class GUI:
                         self.current_function(user_input, user_password)
                     self.current_function(user_input, user_password)
                     self.output_label.configure(text=self.output_msg)
+                    self.output_label.grid()
                     self.entry_box.delete(0, 'end')
                     self.password_entry.delete(0, 'end')  # Clear the password entry
             
@@ -164,6 +165,7 @@ class GUI:
             self.current_function = self.pm.load_key
             self.entry_box.configure(placeholder_text="Specify key filename")
             self.output_msg = "Key loaded successfully"
+            open_file()
 
     # Create blank file if no values are given, API library requires filename
         def create_password_file_btn():
@@ -185,6 +187,7 @@ class GUI:
             self.current_function = self.pm.load_password_file
             self.entry_box.configure(placeholder_text="Specify password filename")
             self.output_msg = "Password file loaded successfully"
+            open_file()
 
         def add_password_btn():
             self.display_password.grid_remove()
@@ -223,8 +226,14 @@ class GUI:
             else:
                 customtkinter.set_appearance_mode("dark")
 
+
+# TODO: add error handling
         def open_file():
             path = customtkinter.filedialog.askopenfilename()
+            if path:
+                self.current_function(path)
+                self.output_label.configure(text=self.output_msg)
+                self.output_label.grid()
 
     # buttons
         button1 = customtkinter.CTkButton(master=self.frame1, 
