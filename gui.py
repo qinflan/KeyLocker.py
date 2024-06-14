@@ -231,7 +231,7 @@ class GUI:
                 customtkinter.set_appearance_mode("dark")
 
 
-# TODO: add error handling
+# TODO: add error handling - key must be loaded first
         def open_file():
             path = customtkinter.filedialog.askopenfilename()
             if path:

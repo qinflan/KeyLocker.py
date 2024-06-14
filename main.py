@@ -73,6 +73,21 @@ class PasswordManager:
                 raise ValueError("No sites found in password dictionary")
         except Exception as e:
             raise ValueError("Unable to load password file") from e
+        
+
+    # implement password update function
+    def update_password(self, site):
+        pass
+
+    # implement {site: password} pair deletion function
+    def delete_password(self, site):
+        pass
+
+    # implement a function that returns True or False based on if a key and password file is successfully loaded
+    # The GUI will conditionally show an initial frame for loading/creating files if False, and password operations if True
+    def show_options(self):
+        pass
+
     
 
 
