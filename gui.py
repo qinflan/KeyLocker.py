@@ -39,6 +39,7 @@ class App:
         self.startup_desc = customtkinter.CTkLabel(master=self.root, 
             text="A free and easy way to safely\nsecure and manage your\npasswords", 
             font=self.output_font, 
+            text_color=("#3C3C3C", "#AFAFAF"),
             width=200, 
             height=90,
             justify="left")
@@ -59,17 +60,18 @@ class App:
 
         # get/add password buttons
         self.frame1 = customtkinter.CTkFrame(master=self.root)
-        self.frame1.place(relx = 0.08, rely = 0.2, relwidth = 0.35, relheight = 0.34)
         self.frame1.columnconfigure((0), weight = 1)
         self.frame1.rowconfigure((0,1,2), weight = 1)
-        self.frame1.place_forget()
 
         # submission and output frame
         self.frame2 = customtkinter.CTkFrame(master=self.root)
-        self.frame2.place(relx = 0.47, rely = 0.2, relwidth = 0.45, relheight = 0.34)
         self.frame2.columnconfigure((0), weight = 1)
         self.frame2.rowconfigure((0,1,2,3), weight = 1)
-        self.frame2.place_forget()
+
+        # update/delete password buttons frame
+        self.frame3 = customtkinter.CTkFrame(master=self.root)
+        self.frame3.columnconfigure((0), weight = 1)
+        self.frame3.rowconfigure((0,1), weight = 1)
 
         # grid frame for file/load buttons
         self.startup_frame1 = customtkinter.CTkFrame(master=self.root)
@@ -164,6 +166,7 @@ class App:
             self.entry_box.configure(placeholder_text="Specify name for key")
             self.current_function = self.pm.create_key
             self.output_msg = "Key successfully created"
+            create_file()
 
         def load_key_btn():
             self.display_password.grid_remove()
@@ -186,6 +189,7 @@ class App:
             self.current_function = self.pm.create_password_file
             self.entry_box.configure(placeholder_text="Specify name for password file")
             self.output_msg = "Password file created"
+            create_file()
 
         def load_password_file_btn():
             self.display_password.grid_remove()
@@ -197,6 +201,7 @@ class App:
             self.entry_box.configure(placeholder_text="Specify password filename")
             self.output_msg = "Password file loaded successfully"
             open_file()
+            switch_frames()
 
         def add_password_btn():
             self.display_password.grid_remove()
@@ -262,22 +267,32 @@ class App:
                 self.output_label.configure(text=self.output_msg)
                 self.output_label.grid()
 
+        def create_file():
+            path = customtkinter.filedialog.asksaveasfilename()
+            if path:
+                self.current_function(path)
+                self.output_label.configure(text=self.output_msg)
+                self.output_label.grid()
+
+
 
 # TODO: fucntion for dynamically switching startup frames to operations frames 
         def switch_frames():
             if self.pm.check_loaded():
                 self.startup_frame1.destroy()
                 self.startup_frame2.destroy()
-                self.startup_frame3.destroy()
                 self.startup_label.destroy()
-                self.logo_label.configure()
-                self.frame1.place()
-                self.frame2.place()
-                self.frame3.place()
+                self.startup_desc.destroy()
 
-            # add error msg handling here
-            else: 
-                pass
+                # Forget the logo_label if it was originally packed
+                self.logo_label.pack_forget()
+
+                # Configure logo_label to move it to the top left
+                self.logo_label.place(relx=0.08, rely=0.06)  # Adjust relx and rely as needed
+
+                self.frame1.place(relx = 0.08, rely = 0.2, relwidth = 0.35, relheight = 0.34)
+                self.frame2.place(relx = 0.47, rely = 0.2, relwidth = 0.45, relheight = 0.63)
+                self.frame3.place(relx = 0.08, rely = 0.57, relwidth = 0.35, relheight = 0.26)
 
 
     # buttons
@@ -370,6 +385,26 @@ class App:
             font=self.btn, 
             command=load_key_btn)
         button7.grid(row = 0, pady=10, padx=12, sticky="swe")
+
+        button8 = customtkinter.CTkButton(master=self.frame3,
+            width=210, 
+            height=50,
+            compound="right",
+            corner_radius=14,
+            text="Update password", 
+            font=self.btn, 
+            command=get_sites_btn)
+        button8.grid(row=0, pady=10, padx=10, sticky="s")
+
+        button9 = customtkinter.CTkButton(master=self.frame3,
+            width=210, 
+            height=50,
+            compound="right",
+            corner_radius=14,
+            text="Remove password", 
+            font=self.btn, 
+            command=get_sites_btn)
+        button9.grid(row=1, pady=10, padx=10, sticky="n")
 
 
     # light mode/dark mode switch
