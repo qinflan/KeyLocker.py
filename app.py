@@ -32,9 +32,9 @@ class App:
 
         # startup hero
         startup_img = customtkinter.CTkImage(dark_image=Image.open("keylocker-dir/flat-character-graphic.png"), 
-        light_image=Image.open("keylocker-dir/flat-character-graphic.png"), size=(300, 300))
+        light_image=Image.open("keylocker-dir/flat-character-graphic.png"), size=(340, 300))
         self.startup_label = customtkinter.CTkLabel(master=self.root, text="", image=startup_img)
-        self.startup_label.place(rely=0.45, relx=0.48)
+        self.startup_label.place(rely=0.4, relx=0.48)
 
         self.startup_desc = customtkinter.CTkLabel(master=self.root, 
             text="A free and easy way to safely\nsecure and manage your\npasswords", 
@@ -43,7 +43,7 @@ class App:
             width=200, 
             height=90,
             justify="left")
-        self.startup_desc.place(relx=0.48, rely=0.3)
+        self.startup_desc.place(relx=0.48, rely=0.27)
 
         # icons
         folder_icon = customtkinter.CTkImage(Image.open("keylocker-dir/folder-icon.png"), size=(22,22))
