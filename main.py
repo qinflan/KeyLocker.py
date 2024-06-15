@@ -76,24 +76,49 @@ class PasswordManager:
         
 
     # implement password update function
-    def update_password(self, site):
-        pass
+    def update_password(self, site, password):
+            try:
+                if site in self.password_dict:
+                    encrypted = Fernet(self.key).encrypt(password.encode())
+                    self.password_dict[site] = encrypted
+
+                if self.password_file is not None:
+                    for line in self.password_file:
+                        if line.startswith(site + ":"):
+                            self.password_file.write(f"{site}:{encrypted}\n")
+
+            except: raise ValueError("Please ensure site/service name is correct")
+            
 
     # implement {site: password} pair deletion function
     def delete_password(self, site):
-        pass
+        try:
+            if site in self.password_dict:
+                self.password_dict.pop(site)
 
-    # implement a function that returns True or False based on if a key and password file is successfully loaded
+            if self.password_file:
+                with open(self.password_file, 'rb') as f:
+                    lines = f.readlines()
+
+                with open(self.password_file, 'wb') as f:
+                    for line in lines:
+                        if not line.startswith(site + ":"):
+                            f.write(line)
+
+
+        except: raise ValueError("Cannot locate site/service in password file")
+
+    # Function that returns True or False based on if a key and password file is successfully loaded
     # The GUI will conditionally show an initial frame for loading/creating files if False, and password operations if True
-    def show_options(self):
-        pass
+    def check_loaded(self):
+        return self.key is not None and self.password_file is not None
+
 
     
 
-
+# Command line test case
 def main():
 
-    #test case
     password = {
         "email": "1234567",
         "facebook": "myfbpassword",
