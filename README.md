@@ -1,5 +1,5 @@
 # KeyLocker: Password-Manager:
- A local python password manager that utilizes secret key encryption to store/retrieve passwords. Featuring a minimal graphical user interface, you're able to securely store passwords, and only access them with a secret generated key for Fernet Encryption.
+ A local python password manager that utilizes secret key encryption to store/retrieve passwords. Featuring a minimal graphical user interface, you're able to securely store passwords, and only access them with a secret generated key with Fernet Encryption.
 
 # How to use:
  A user must first create a key and password file to add or update passwords from. These files must be loaded in order to be able to add/retrieve/update passwords.
