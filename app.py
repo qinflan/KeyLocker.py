@@ -53,7 +53,8 @@ class App:
         new_key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-key-icon2.png"), size=(23,23))
         add_file_icon = customtkinter.CTkImage(Image.open("keylocker-dir/add-file.png"), size=(25,25))
         key_icon = customtkinter.CTkImage(Image.open("keylocker-dir/logo.png"), size=(22,22))
-
+        delete_icon = customtkinter.CTkImage(Image.open("keylocker-dir/delete-icon.png"), size=(22,22))
+        update_icon = customtkinter.CTkImage(Image.open("keylocker-dir/update-icon.png"), size=(22,22))
 
     # frame containers
     #-----------------------
@@ -91,8 +92,8 @@ class App:
         self.entry_box = customtkinter.CTkEntry(self.frame2, width=250, placeholder_text="Select an option", font=self.btn)
         self.entry_box.grid(row = 0)
         self.password_entry = customtkinter.CTkEntry(self.frame2, width=250, placeholder_text="Enter password", font=self.btn, show="●")
-        self.password_entry.grid(row=1)  # Initially grid it, but set it to be invisible
-        self.password_entry.grid_remove()  # Hide it initially
+        self.password_entry.grid(row=1) 
+        self.password_entry.grid_remove()  
 
 
     # Submission Handling
@@ -117,7 +118,7 @@ class App:
                     self.entry_box.delete(0, 'end')
                     self.password_entry.delete(0, 'end')
 
-                # create file on submit
+                # run function on submit
                 else:
                     if user_input and self.current_function:
                         self.current_function(user_input)
@@ -131,14 +132,14 @@ class App:
                     if self.current_function == self.pm.get_password:
                         password = self.current_function(user_input)
                         if password:
-                            self.display_password.configure(state="normal")  # Enable the text box
-                            self.display_password.delete("1.0", "end")  # Clear previous content
+                            self.display_password.configure(state="normal")  
+                            self.display_password.delete("1.0", "end")  
                             self.output_msg = f"Password for {user_input}"
                             self.output_label.configure(text=self.output_msg)
                             self.output_label.grid(row=2)
                             self.display_password.tag_config("center", justify='center')
-                            self.display_password.insert("end", password)  # Insert password
-                            self.display_password.configure(state="disabled")  # Set back to read-only
+                            self.display_password.insert("end", password)  
+                            self.display_password.configure(state="disabled")
                             self.display_password.tag_add("center", "1.0", "end")
                             self.display_password.grid()
 
@@ -205,7 +206,6 @@ class App:
 
         def add_password_btn():
             self.display_password.grid_remove()
-            self.password_entry.grid_remove()
             self.display_sites.grid_remove()
             self.output_label.grid(row=3)
             self.output_label.grid_remove()
@@ -223,6 +223,28 @@ class App:
             self.current_function = self.pm.get_password
             self.entry_box.configure(placeholder_text="Enter site for password") 
 
+        def del_password_btn():
+            self.display_password.grid_remove()
+            self.password_entry.grid_remove()
+            self.display_sites.grid_remove()
+            self.output_label.grid_remove()
+            self.current_function = self.pm.delete_password
+            self.entry_box.configure(placeholder_text="Enter site to delete password")
+            self.output_msg = "Password Successfully Deleted"
+
+
+
+        def update_password_btn():
+            self.display_password.grid_remove()
+            self.password_entry.grid()
+            self.display_sites.grid_remove()
+            self.output_label.grid(row=3)
+            self.output_label.grid_remove()
+            submit_button.grid(row=2)
+            self.current_function = self.pm.update_password
+            self.entry_box.configure(placeholder_text="Enter site/service name")
+            self.output_msg = ""
+
         def get_sites_btn():
             self.password_entry.grid_remove()
             self.display_password.grid_remove()
@@ -230,14 +252,14 @@ class App:
             self.entry_box.configure(placeholder_text="Select an option")
             self.current_function = self.pm.get_sites
             self.output_msg = "Associated sites"
-            self.display_sites.configure(state="normal", height=60)  # Enable the text box
-            self.display_sites.delete("1.0", "end")  # Clear previous content
+            self.display_sites.configure(state="normal", height=60)  
+            self.display_sites.delete("1.0", "end") 
 
             # Error handling - ensure password file is loaded
             try:
                 for site in self.current_function():
-                    self.display_sites.insert("end", f"{site}\n")  # Insert site
-                self.display_sites.configure(state="disabled",)  # Set back to read-only
+                    self.display_sites.insert("end", f"{site}\n")  
+                self.display_sites.configure(state="disabled",)
                 self.display_sites.tag_config("center", justify='center')
                 self.display_sites.tag_add("center", "1.0", "end")
                 self.display_sites.grid()
@@ -276,7 +298,7 @@ class App:
 
 
 
-# TODO: fucntion for dynamically switching startup frames to operations frames 
+        # fucntion for dynamically switching startup frames to operations frames 
         def switch_frames():
             if self.pm.check_loaded():
                 self.startup_frame1.destroy()
@@ -284,11 +306,11 @@ class App:
                 self.startup_label.destroy()
                 self.startup_desc.destroy()
 
-                # Forget the logo_label if it was originally packed
+                # Forget the logo_label that was originally packed
                 self.logo_label.pack_forget()
 
                 # Configure logo_label to move it to the top left
-                self.logo_label.place(relx=0.08, rely=0.06)  # Adjust relx and rely as needed
+                self.logo_label.place(relx=0.08, rely=0.06)
 
                 self.frame1.place(relx = 0.08, rely = 0.2, relwidth = 0.35, relheight = 0.34)
                 self.frame2.place(relx = 0.47, rely = 0.2, relwidth = 0.45, relheight = 0.63)
@@ -387,23 +409,25 @@ class App:
         button7.grid(row = 0, pady=10, padx=12, sticky="swe")
 
         button8 = customtkinter.CTkButton(master=self.frame3,
+            image=update_icon,
             width=210, 
             height=50,
             compound="right",
             corner_radius=14,
             text="Update password", 
             font=self.btn, 
-            command=get_sites_btn)
+            command=update_password_btn)
         button8.grid(row=0, pady=10, padx=10, sticky="s")
 
         button9 = customtkinter.CTkButton(master=self.frame3,
+            image=delete_icon,
             width=210, 
             height=50,
             compound="right",
             corner_radius=14,
             text="Remove password", 
             font=self.btn, 
-            command=get_sites_btn)
+            command=del_password_btn)
         button9.grid(row=1, pady=10, padx=10, sticky="n")
 
 

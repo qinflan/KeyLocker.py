@@ -80,12 +80,17 @@ class PasswordManager:
             try:
                 if site in self.password_dict:
                     encrypted = Fernet(self.key).encrypt(password.encode())
-                    self.password_dict[site] = encrypted
+                    self.password_dict[site] = password
 
-                if self.password_file is not None:
-                    for line in self.password_file:
-                        if line.startswith(site + ":"):
-                            self.password_file.write(f"{site}:{encrypted}\n")
+                if self.password_file:
+                    with open(self.password_file, 'r') as f:
+                        lines = f.readlines()
+                    with open(self.password_file, 'w') as f:
+                        for line in lines:
+                            if line.startswith(site + ":"):
+                                f.write(site + ":" + encrypted.decode() + "\n")
+                            else:
+                                f.write(line)
 
             except: raise ValueError("Please ensure site/service name is correct")
             
@@ -97,10 +102,10 @@ class PasswordManager:
                 self.password_dict.pop(site)
 
             if self.password_file:
-                with open(self.password_file, 'rb') as f:
+                with open(self.password_file, 'r') as f:
                     lines = f.readlines()
 
-                with open(self.password_file, 'wb') as f:
+                with open(self.password_file, 'w') as f:
                     for line in lines:
                         if not line.startswith(site + ":"):
                             f.write(line)
