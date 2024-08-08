@@ -7,7 +7,7 @@
  There is a file dialog prompt for creation and loading of these files, if a user does not have an existing key and password file, then they should initially create this pair. They can exist in any folder, but for improved security I'd recommend storing the key on a USB flash drive, which would provide a layer of physical security.
 
 
-![image alt](https://github.com/qinflan/KeyLocker.py/blob/87ca62a2fe3a9080d177f427c9e6c13f379f2308/KeyLocker%20GUI%20Operations%20Frame.png)
+![image alt](https://github.com/qinflan/KeyLocker.py/blob/ff3ee1f3d240b1ff90e9d555478c5404db86e786/KeyLocker%20GUI%20Operations%20Frame.png)
 
 
 # Intended Use:
