@@ -10,9 +10,6 @@
 ![image alt](https://github.com/qinflan/KeyLocker.py/blob/ff3ee1f3d240b1ff90e9d555478c5404db86e786/KeyLocker%20GUI%20Operations%20Frame.png)
 
 
-# Intended Use:
- I originally created this password-manager at the command line, but wanted to implement a user friendly GUI to make it accessable to non-technical users.
-
 # Note:
  This is my first project involving encryption and a python graphical user-interface, so any criticism or feedback is welcome and appreciated! 
 
