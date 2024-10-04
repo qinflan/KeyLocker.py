@@ -11,7 +11,7 @@
 
 
 # Intended Use:
- I originally created this password-manager at the command line, but wanted to implement a user friendly GUI to make it accessable to non-technical users. I'm currently thinking about developing a second version that would initiate a local database instance for a user, and store encrypted passwords through tables instead of a local file. However, I wanted to start by creating a safe local version that is not susceptible to SQL injection.
+ I originally created this password-manager at the command line, but wanted to implement a user friendly GUI to make it accessable to non-technical users.
 
 # Note:
  This is my first project involving encryption and a python graphical user-interface, so any criticism or feedback is welcome and appreciated! 
